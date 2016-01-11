@@ -5,8 +5,8 @@ import time
 import requests
 import meinheld
 
-DEVICE_ID = '260041000947343432313031'
-ACCESS_TOKEN = 'f9f92bf07036c68592f67d15a46015c9d094f992'
+DEVICE_ID = ''
+ACCESS_TOKEN = ''
 
 API_URL = 'https://api.spark.io/v1/devices'
 DEVICE_URL = API_URL+'/'+DEVICE_ID
