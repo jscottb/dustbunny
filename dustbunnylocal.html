@@ -104,10 +104,6 @@ function setSpeed (speed) {
    var requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/speed";
    $.post( requestURL, { params: speed, access_token: accessToken });
 }
-function setAuto (state) {
-   var requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/setauto";
-   $.post( requestURL, { params: state, access_token: accessToken });
-}
 </script>
 </head>
 <center>
