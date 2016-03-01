@@ -177,7 +177,7 @@ def motors (direction, run_time):
 
 def setspeed (speed):
     r = requests.post(DEVICE_URL+'/speed',
-        data={'access_token':ACCESS_TOKEN, 'args':'5,'+str(speed)})
+        data={'access_token':ACCESS_TOKEN, 'args':str(speed)})
     ret_json = r.json ( )
     return_val = ret_json['return_value']
     return int(return_val)
