@@ -12,59 +12,66 @@
 <title>Dustbunny Local Control page</title>
 <script type="text/javascript">
 document.onkeypress = keypressed;
+document.onload = initBot;
 // WARNING!!!!! DO NOT RUN IN THE DMZ!
 // This script should only be run locally on your computer due to the device
 // and access token being used to talk to the robot. Again, this is only for
 // local use!
 var deviceID    = "<YOUR DEVICE ID>";
-var accessToken = "YOUR ACCESS TOKEN>";
+var accessToken = "<YOUR ACCESS TOKEN>";
 // !!!!!WARNING END
 var last_action = "";
 var start_dt = new Date ( );
 var last_mills = start_dt.getTime ( );
 var run_time = "750"
 var turn_tm = 166
+var auto_state = false
+
 function sentBotCommand (action) {
    var run_dt = new Date ( );
    var mills = run_dt.getTime ( );
    // If a dup, ignore if newer than 500ms
    if (action == last_action && (mills - last_mills) <= 500)
       return;
+
+  console.log ("Action = " + action)
    last_mills = mills;
    last_action = action;
-   if (action == 'stop')
+   if (action == 'stop') {
       motors ("0", "0")
-   if (action == 'forward')
+      run_time = "750"
+   }
+   else if (action == 'forward')
       motors ("1", run_time)
-   if (action == 'backward')
+   else if (action == 'backward')
       motors ("2", run_time)
-   if (action == 'left')
+   else if (action == 'left')
       motors ("3", 500 - (turn_tm / 2))
-   if (action == 'right')
+   else if (action == 'right')
       motors ("4", 500 - (turn_tm / 2))
-   if (action == 'ltforward')
+   else if (action == 'ltforward')
       motors ("3", 250 - (turn_tm / 2))
-   if (action == 'rtforward')
+   else if (action == 'rtforward')
       motors ("4", 250 - (turn_tm / 2))
-   if (action == 'speed_low') {
+   else if (action == 'speed_low') {
       setSpeed ("150")
       turn_tm = 83
    }
-   if (action == 'speed_mid') {
+   else if (action == 'speed_mid') {
       setSpeed ("200")
       turn_tm = 166
    }
-   if (action == 'speed_hi') {
-      setSpeed ("250")
+   else if (action == 'speed_hi') {
+      setSpeed ("255")
       turn_tm = 332
    }
-   if (action == 'short_time') {
+   else if (action == 'short_time') {
       run_time = "300"
    }
-   if (action == 'mid_run') {
+   else if (action == 'mid_run') {
       run_time = "750"
    }
-   if (action == 'continuous') {
+   else if (action == 'continuous') {
       run_time = "0"
    }
 }
@@ -85,13 +92,21 @@ function keypressed (event) {
    if (keyCd == 115 || keyCd == 83)  // s
       sentBotCommand ('right')
 }
+function initBot (event) {
+   setSpeed ("200");
+   motors ("0", "0");
+}
 function motors (direction, run_time) {
    var requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/motors";
    $.post( requestURL, { params: direction+","+run_time, access_token: accessToken });
 }
 function setSpeed (speed) {
-   var requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/motors";
-   $.post( requestURL, { params: "5,"+speed, access_token: accessToken });
+   var requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/speed";
+   $.post( requestURL, { params: speed, access_token: accessToken });
+}
+function setAuto (state) {
+   var requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/setauto";
+   $.post( requestURL, { params: state, access_token: accessToken });
 }
 </script>
 </head>
